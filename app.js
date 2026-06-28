@@ -217,8 +217,9 @@ function paintNotifBtn() {
   const btn = $('#notif-btn');
   if (!btn) return;
   if (!('Notification' in window)) { btn.hidden = true; return; }
-  if (notifsOn()) { btn.textContent = '🔔 On'; btn.classList.add('on'); }
-  else { btn.textContent = '🔔 Notify'; btn.classList.remove('on'); }
+  const on = notifsOn();
+  btn.classList.toggle('on', on);                 // shows the dot
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
 }
 async function toggleNotifs() {
   if (!('Notification' in window)) return;

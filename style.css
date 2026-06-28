@@ -39,6 +39,14 @@ body{
   box-shadow:0 2px 0 var(--cream-deep);transition:transform .1s}
 .icon-btn:active{transform:translateY(2px);box-shadow:none}
 .icon-btn.on{background:#cfe9cf;border-color:#9fce9f;color:#3c6b3c}
+/* notifications bell — plain bell, dot badge when on */
+.bell-btn{position:relative;background:none;border:0;cursor:pointer;font-family:inherit;
+  font-size:1.3rem;line-height:1;padding:4px 6px;color:var(--ink)}
+.bell-btn:active{transform:translateY(1px)}
+.bell-dot{position:absolute;top:1px;right:2px;width:9px;height:9px;border-radius:50%;
+  background:var(--collar);border:2px solid var(--cream);
+  opacity:0;transform:scale(.4);transition:opacity .15s,transform .18s cubic-bezier(.2,.9,.3,1.6)}
+.bell-btn.on .bell-dot{opacity:1;transform:scale(1)}
 
 /* ---------- screens ---------- */
 .screens{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;

@@ -9,6 +9,7 @@ const VALID = new Set([
   'hk-water', 'hk-snacks', 'hk-wear', 'hk-misc',
   'ln-call',
   'fs-license', 'fs-order', 'fs-home',
+  'sm-firewood', 'sm-sweet', 'sm-savory',
 ]);
 
 const LABELS = {
@@ -16,6 +17,7 @@ const LABELS = {
   'hk-water': 'Water (2 L)', 'hk-snacks': 'Trail snacks', 'hk-wear': 'Shoes · layer · sun', 'hk-misc': 'Phone · bandaids · bag',
   'ln-call': "Call Twede's",
   'fs-license': 'Fishing licenses', 'fs-order': 'Amazon gear', 'fs-home': 'Tackle from home',
+  'sm-firewood': 'Firewood + sticks', 'sm-sweet': "Cookie-dough s'mores", 'sm-savory': 'Savory s\'mores',
 };
 
 const json = (data, status = 200) =>

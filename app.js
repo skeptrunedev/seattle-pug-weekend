@@ -10,6 +10,7 @@ const SECTIONS = {
   hike:    ['hk-water', 'hk-snacks', 'hk-wear', 'hk-misc'],
   lunch:   ['ln-call'],
   fishing: ['fs-license', 'fs-order', 'fs-home'],
+  smores:  ['sm-firewood', 'sm-sweet', 'sm-savory'],
 };
 const TOTAL = Object.values(SECTIONS).flat().length;
 const RING_LEN = 2 * Math.PI * 52; // r=52

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f4e7cf" />
-<title>Seattle Weekend 🐾</title>
+<title>Seattle Weekend</title>
 <meta name="description" content="A little companion app for our Seattle weekend — parking, hikes, lunch, and fishing, all tracked." />
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
@@ -58,7 +58,7 @@
         <div class="readiness-num"><b id="readiness-pct">0%</b><span>ready</span></div>
         <div class="readiness-meta">
           <p class="readiness-title">Weekend readiness</p>
-          <p class="readiness-sub" id="readiness-sub">0 / 11 done · tap a card to start</p>
+          <p class="readiness-sub" id="readiness-sub">0 / 14 done · tap a card to start</p>
         </div>
       </div>
 
@@ -75,6 +75,9 @@
         <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-license"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Buy 2 fishing licenses</span></label>
         <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-order"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Order Amazon fishing gear</span></label>
         <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-home"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Pack tackle from home</span></label>
+        <label class="check" style="--c:var(--smores)"><input type="checkbox" data-id="sm-firewood"><span class="box"></span><span class="lbl"><span class="dot">s'mores</span>Buy firewood + fire starter</span></label>
+        <label class="check" style="--c:var(--smores)"><input type="checkbox" data-id="sm-sweet"><span class="box"></span><span class="lbl"><span class="dot">s'mores</span>Cookie-dough s'mores fixings</span></label>
+        <label class="check" style="--c:var(--smores)"><input type="checkbox" data-id="sm-savory"><span class="box"></span><span class="lbl"><span class="dot">s'mores</span>Savory s'mores fixings</span></label>
       </div>
 
       <h2 class="eyebrow">jump to a screen</h2>
@@ -95,6 +98,10 @@
           <img src="assets/img/pug-fishing.png?v=2" alt="" /><span class="tile-name">Fishing</span>
           <span class="tile-prog" data-prog="fishing">0/3</span>
         </button>
+        <button class="tile" data-go="smores" style="--c:var(--smores)">
+          <img src="assets/img/pug-smores.png" alt="" /><span class="tile-name">S'mores</span>
+          <span class="tile-prog" data-prog="smores">0/3</span>
+        </button>
       </div>
 
       <h2 class="eyebrow">saturday · jul 11</h2>
@@ -114,7 +121,8 @@
         <li><span class="t">12:30p</span> Lunch</li>
         <li><span class="t">2:00p</span> Relax</li>
         <li><span class="t">3:00p</span> It Takes Two <small>(co-op)</small></li>
-        <li><span class="t">6:30p</span> Movie <small>(maybe)</small></li>
+        <li><span class="t">5:30p</span> Golden Gardens — grab a fire pit</li>
+        <li><span class="t">6:30p</span> S'mores by the fire 🔥</li>
         <li><span class="t">9:00p</span> Head out</li>
       </ol>
       <div class="pug-sign"><img src="assets/img/pug-sleep.png" alt="" /><p>that's the weekend. good pug.</p></div>
@@ -230,15 +238,49 @@
       <div class="pug-sign small"><img src="assets/img/pug-shaking-fun.png?v=2" alt="" /><p>tight lines 🐾</p></div>
     </section>
 
+    <!-- ================= S'MORES ================= -->
+    <section class="screen" data-screen="smores" style="--c:var(--smores)">
+      <header class="screen-head">
+        <img src="assets/img/pug-smores.png" alt="" />
+        <div><h1>S'mores</h1><p class="screen-prog" data-prog="smores">0/3 sorted</p></div>
+      </header>
+      <article class="card">
+        <h3>🔥 Golden Gardens fire pits <span class="tag">Sun PM</span></h3>
+        <p>Free beach fire pits in Ballard — <b>first-come</b>, unlocked <b>5:30p</b>, fires out by <b>10p</b>. Bring your own clean, dry firewood (gathering driftwood isn't allowed) + a lighter.</p>
+        <p><b>Parking:</b> free on-site lots (lower by the beach, upper by the dog park) but they <b>fill on summer evenings</b> — getting there ~5:30p helps grab both a spot and a pit. Gates lock at 10:30p.</p>
+        <a class="btn" href="https://maps.google.com/?q=Golden+Gardens+Park,+Seattle,+WA" target="_blank" rel="noopener">Open Golden Gardens in Maps ↗</a>
+      </article>
+      <article class="card">
+        <h3>🪵 Firewood + firestarter</h3>
+        <p>One stop on the way: <b>Fred Meyer Ballard</b> has <b>firewood bundles</b> (~$13), <b>fatwood / fire starters</b>, plus marshmallows + all the s'mores fixings.</p>
+        <a class="btn" href="https://maps.google.com/?q=Fred+Meyer,+915+NW+45th+St,+Seattle,+WA" target="_blank" rel="noopener">Open Fred Meyer in Maps ↗</a>
+      </article>
+      <article class="card">
+        <h3>🍪 Cookie-dough s'mores</h3>
+        <p>Chocolate-chip cookies (or edible cookie dough) + toasted marshmallow + chocolate square.</p>
+      </article>
+      <article class="card">
+        <h3>🧀 Savory s'mores</h3>
+        <p>Sturdy crackers (Breton) + <b>brie</b> (roast it on the stick) + <b>salami</b> + <b>fig spread</b>.</p>
+      </article>
+      <article class="card">
+        <h3>🛒 Get it sorted</h3>
+        <a class="btn" href="https://www.amazon.com/s?k=marshmallow+roasting+sticks" target="_blank" rel="noopener">Roasting sticks on Amazon ↗</a>
+        <label class="check"><input type="checkbox" data-id="sm-firewood"><span class="box"></span><span class="lbl">Buy firewood + fire starter + roasting sticks</span></label>
+        <label class="check"><input type="checkbox" data-id="sm-sweet"><span class="box"></span><span class="lbl">Cookie-dough fixings: cookies/dough, marshmallows, chocolate</span></label>
+        <label class="check"><input type="checkbox" data-id="sm-savory"><span class="box"></span><span class="lbl">Savory fixings: crackers, brie, salami, fig spread</span></label>
+      </article>
+    </section>
+
   </main>
 
   <!-- bottom tab bar -->
   <nav class="tabbar" id="tabbar">
     <button class="tab is-active" data-go="home"><img class="ti" src="assets/img/pug-checklist.png" alt="" /><span>Home</span></button>
-    <button class="tab" data-go="parking"><img class="ti" src="assets/img/pug-car.png" alt="" /><span>Park</span></button>
     <button class="tab" data-go="hike"><img class="ti" src="assets/img/pug-hiking.png" alt="" /><span>Hike</span></button>
     <button class="tab" data-go="lunch"><img class="ti" src="assets/img/pug-cheeseburger.png" alt="" /><span>Lunch</span></button>
     <button class="tab" data-go="fishing"><img class="ti" src="assets/img/pug-fishing.png?v=2" alt="" /><span>Fish</span></button>
+    <button class="tab" data-go="smores"><img class="ti" src="assets/img/pug-smores.png" alt="" /><span>S'mores</span></button>
   </nav>
 
   <!-- celebration layer -->

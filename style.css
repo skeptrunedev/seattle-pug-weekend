@@ -2,7 +2,7 @@
   --cream:#f4e7cf; --cream-deep:#ecdab8;
   --card:#fffaf0; --card-2:#fdf3e0;
   --ink:#4a3525; --ink-soft:#7a6450; --line:#e4d3b3;
-  --park:#5a9bd4; --hike:#6fae6a; --lunch:#e8924a; --fish:#3fb0a6; --smores:#cf6b4a;
+  --park:#5a9bd4; --hike:#6fae6a; --lunch:#e8924a; --fish:#3fb0a6; --smores:#cf6b4a; --race:#d65a4a;
   --gold:#e0b04a; --collar:#c0563f;
   --shadow:0 10px 26px rgba(91,61,41,.16);
   --radius:22px;
@@ -226,9 +226,13 @@ body{
 
   /* multi-card screens -> two columns, header spans */
   .screen[data-screen=parking].is-active,
+  .screen[data-screen=hike].is-active,
+  .screen[data-screen=race].is-active,
   .screen[data-screen=fishing].is-active,
   .screen[data-screen=smores].is-active{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;align-content:start}
   .screen[data-screen=parking] .screen-head,
+  .screen[data-screen=hike] .screen-head,
+  .screen[data-screen=race] .screen-head,
   .screen[data-screen=fishing] .screen-head,
   .screen[data-screen=smores] .screen-head,
   .screen[data-screen=fishing] .pug-sign{grid-column:1 / -1}

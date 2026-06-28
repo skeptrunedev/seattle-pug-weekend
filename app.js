@@ -6,9 +6,9 @@ const NOTIF_PREF = 'spw-notif';
 const VAPID_PUBLIC = 'BFSu8U-LDVea9hFmAMQ9XHoaYfvPkmlXcllv7o1eqki9F7OABINKmDBHr4wLfVRasPOll4m6P3Y0tdheYOEkUrc';
 
 const SECTIONS = {
-  parking: ['pk-discover', 'pk-tickets', 'pk-greenlake'],
-  hike:    ['hk-water', 'hk-snacks', 'hk-wear', 'hk-misc'],
-  lunch:   ['ln-call'],
+  parking: ['pk-discover', 'pk-greenlake'],
+  hike:    ['hk-water', 'hk-snacks', 'hk-wear', 'hk-misc', 'ln-call'],
+  race:    ['pk-tickets'],
   fishing: ['fs-license', 'fs-order', 'fs-home'],
   smores:  ['sm-firewood', 'sm-sweet', 'sm-savory'],
 };

@@ -65,7 +65,7 @@
       <h2 class="eyebrow">things to do <small>· shared & synced live</small></h2>
       <div class="card tasklist">
         <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-discover"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy the Discover Pass</span></label>
-        <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy 2 Speedway tickets (~$50)</span></label>
+        <label class="check" style="--c:var(--race)"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl"><span class="dot">race</span>Buy 2 Speedway tickets (~$50)</span></label>
         <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-greenlake"><span class="box"></span><span class="lbl"><span class="dot">park</span>Green Lake — arrive ~8:00 AM</span></label>
         <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-water"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Pack 2 L water</span></label>
         <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-snacks"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Pack trail snacks</span></label>
@@ -84,15 +84,15 @@
       <div class="bento">
         <button class="tile" data-go="parking" style="--c:var(--park)">
           <img src="assets/img/pug-car.png" alt="" /><span class="tile-name">Parking</span>
-          <span class="tile-prog" data-prog="parking">0/3</span>
+          <span class="tile-prog" data-prog="parking">0/2</span>
         </button>
         <button class="tile" data-go="hike" style="--c:var(--hike)">
           <img src="assets/img/pug-hiking.png" alt="" /><span class="tile-name">Hike</span>
-          <span class="tile-prog" data-prog="hike">0/4</span>
+          <span class="tile-prog" data-prog="hike">0/5</span>
         </button>
-        <button class="tile" data-go="lunch" style="--c:var(--lunch)">
-          <img src="assets/img/pug-cheeseburger.png" alt="" /><span class="tile-name">Lunch</span>
-          <span class="tile-prog" data-prog="lunch">0/1</span>
+        <button class="tile" data-go="race" style="--c:var(--race)">
+          <img src="assets/img/pug-racing.png" alt="" /><span class="tile-name">Race</span>
+          <span class="tile-prog" data-prog="race">0/1</span>
         </button>
         <button class="tile" data-go="fishing" style="--c:var(--fish)">
           <img src="assets/img/pug-fishing.png?v=2" alt="" /><span class="tile-name">Fishing</span>
@@ -131,7 +131,7 @@
     <section class="screen" data-screen="parking" style="--c:var(--park)">
       <header class="screen-head">
         <img src="assets/img/pug-car.png" alt="" />
-        <div><h1>Parking</h1><p class="screen-prog" data-prog="parking">0/3 sorted</p></div>
+        <div><h1>Parking</h1><p class="screen-prog" data-prog="parking">0/2 sorted</p></div>
       </header>
 
       <article class="card">
@@ -140,15 +140,6 @@
         <p>We buy a <b>Discover Pass</b> so the overflow lot is a clean fallback (and circle the main lot — turnover is constant).</p>
         <a class="btn" href="https://store.discoverpass.wa.gov/" target="_blank" rel="noopener">Buy Discover Pass · $45/yr ↗</a>
         <label class="check"><input type="checkbox" data-id="pk-discover"><span class="box"></span><span class="lbl">Buy the Discover Pass ahead of time</span></label>
-      </article>
-
-      <article class="card">
-        <h3>🏁 Evergreen Speedway <span class="tag">Sat PM</span></h3>
-        <img class="card-pug" src="assets/img/pug-racing.png" alt="" />
-        <p><b>PLM Reunion Night</b> — 14405 179th Ave SE, Monroe.</p>
-        <p>Gates <b>4:00p</b> · racing <b>6:00p</b> · ends <b>~9:45p</b>. <b>Gravel lot is FREE</b> (paved $10).</p>
-        <a class="btn" href="https://maps.google.com/?q=Evergreen+Speedway+Monroe+WA" target="_blank" rel="noopener">Open in Maps ↗</a>
-        <label class="check"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl">Buy 2 adult tickets ahead (~$50)</span></label>
       </article>
 
       <article class="card">
@@ -167,7 +158,7 @@
     <section class="screen" data-screen="hike" style="--c:var(--hike)">
       <header class="screen-head">
         <img src="assets/img/pug-hiking.png" alt="" />
-        <div><h1>Hike Prep</h1><p class="screen-prog" data-prog="hike">0/4 packed</p></div>
+        <div><h1>Hike + Lunch</h1><p class="screen-prog" data-prog="hike">0/5 packed</p></div>
       </header>
       <article class="card">
         <p><b>Rattlesnake Ledge</b> — ~4 mi round trip, ~1,160 ft gain, big view at the ledge. Pack the night before so the 8:00a start is grab-and-go.</p>
@@ -183,21 +174,33 @@
         <label class="check"><input type="checkbox" data-id="hk-wear"><span class="box"></span><span class="lbl">Shoes with grip · layer · sunscreen + hat</span></label>
         <label class="check"><input type="checkbox" data-id="hk-misc"><span class="box"></span><span class="lbl">Phone charged · bandaids · trash bag (pack it out)</span></label>
       </article>
-    </section>
-
-    <!-- ================= LUNCH ================= -->
-    <section class="screen" data-screen="lunch" style="--c:var(--lunch)">
-      <header class="screen-head">
-        <img src="assets/img/pug-cheeseburger.png" alt="" />
-        <div><h1>Lunch</h1><p class="screen-prog" data-prog="lunch">0/1 sorted</p></div>
-      </header>
       <article class="card">
-        <h3>🍔 Twede's Cafe</h3>
-        <p>The <i>Twin Peaks</i> "Double R Diner." Big portions, burgers with unlimited fries, cherry pie. Post-hike, on the way to Monroe.</p>
+        <h3>🍔 Lunch — Twede's Cafe</h3>
+        <p>Post-hike, on the way to Monroe. The <i>Twin Peaks</i> "Double R Diner" — big portions, burgers with unlimited fries, cherry pie.</p>
         <p class="meta">137 W North Bend Way, North Bend, WA</p>
         <a class="btn" href="https://maps.google.com/?q=Twede's+Cafe,+North+Bend,+WA" target="_blank" rel="noopener">Open in Maps ↗</a>
         <a class="btn" href="tel:4258315511">Call 425-831-5511 ↗</a>
         <label class="check"><input type="checkbox" data-id="ln-call"><span class="box"></span><span class="lbl">Call ahead — it gets a weekend wait</span></label>
+      </article>
+    </section>
+
+    <!-- ================= LUNCH ================= -->
+    <section class="screen" data-screen="race" style="--c:var(--race)">
+      <header class="screen-head">
+        <img src="assets/img/pug-racing.png" alt="" />
+        <div><h1>Race</h1><p class="screen-prog" data-prog="race">0/1 sorted</p></div>
+      </header>
+      <article class="card">
+        <h3>🏁 Evergreen Speedway <span class="tag">Sat PM</span></h3>
+        <p><b>Central Welding Supply 125 — PLM Reunion Night.</b> 14405 179th Ave SE, Monroe.</p>
+        <p>Gates <b>4:00p</b> · opening ceremonies / racing <b>6:00p</b> · ends <b>~9:45p</b>.</p>
+        <a class="btn" href="https://evergreenspeedway.com/events/saturday-july-11th-2026-central-welding-supply-125-plm-reunion-night-presented-by-evergreen-health-monroe/" target="_blank" rel="noopener">Race details ↗</a>
+        <a class="btn" href="https://maps.google.com/?q=Evergreen+Speedway+Monroe+WA" target="_blank" rel="noopener">Open in Maps ↗</a>
+      </article>
+      <article class="card">
+        <h3>🎟️ Tickets + parking</h3>
+        <p>Adult <b>$25</b> each (2 = <b>$50</b>). <b>Gravel lot is FREE</b> (paved $10) — head for the gravel lot.</p>
+        <label class="check"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl">Buy 2 adult tickets ahead (~$50)</span></label>
       </article>
     </section>
 
@@ -278,7 +281,7 @@
   <nav class="tabbar" id="tabbar">
     <button class="tab is-active" data-go="home"><img class="ti" src="assets/img/pug-checklist.png" alt="" /><span>Home</span></button>
     <button class="tab" data-go="hike"><img class="ti" src="assets/img/pug-hiking.png" alt="" /><span>Hike</span></button>
-    <button class="tab" data-go="lunch"><img class="ti" src="assets/img/pug-cheeseburger.png" alt="" /><span>Lunch</span></button>
+    <button class="tab" data-go="race"><img class="ti" src="assets/img/pug-racing.png" alt="" /><span>Race</span></button>
     <button class="tab" data-go="fishing"><img class="ti" src="assets/img/pug-fishing.png?v=2" alt="" /><span>Fish</span></button>
     <button class="tab" data-go="smores"><img class="ti" src="assets/img/pug-smores.png" alt="" /><span>S'mores</span></button>
   </nav>

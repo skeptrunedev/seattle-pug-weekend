@@ -50,22 +50,46 @@ async function push(id, checked) {
   } catch { /* reconciles on next pull */ }
 }
 
-// ---------- navigation (history-aware so Back / swipe-back works) ----------
+// ---------- navigation: history-aware + per-screen scroll memory + view transitions ----------
 const SCREENS = { home: 1, ...SECTIONS };
-function setScreen(name) {
-  if (!(name in SCREENS)) name = 'home';
+const rootEl = document.documentElement;
+const motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scrollMem = Object.create(null);   // screen -> last scrollTop (in-memory, no URL hacks)
+let navIdx = 0;
+
+function applyScreen(name) {
   $$('.screen').forEach(s => s.classList.toggle('is-active', s.dataset.screen === name));
   $$('.tab').forEach(t => t.classList.toggle('is-active', t.dataset.go === name));
-  $('#screens').scrollTop = 0;
+}
+function setScreen(name, dir) {
+  if (!(name in SCREENS)) name = 'home';
+  const sc = $('#screens');
+  const cur = $('.screen.is-active')?.dataset.screen;
+  if (cur && cur !== name) scrollMem[cur] = sc.scrollTop;   // remember where we left this screen
+  const change = () => { applyScreen(name); sc.scrollTop = scrollMem[name] || 0; };
+  if (dir && motionOK && document.startViewTransition) {
+    rootEl.dataset.nav = dir;                                // CSS picks slide direction
+    document.startViewTransition(change).finished
+      .finally(() => { if (rootEl.dataset.nav === dir) delete rootEl.dataset.nav; });
+  } else {
+    change();
+  }
 }
 function go(name) {
   if (!(name in SCREENS)) name = 'home';
-  if (location.hash.slice(1) !== name) history.pushState({ name }, '', '#' + name);
-  setScreen(name);
+  if (location.hash.slice(1) === name) return;
+  navIdx += 1;
+  history.pushState({ name, idx: navIdx }, '', '#' + name);
+  setScreen(name, 'forward');
 }
 $$('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
-// Back/forward (incl. iOS/Android swipe) restores the previous screen
-window.addEventListener('popstate', () => setScreen((location.hash || '#home').slice(1)));
+// Back/forward (incl. iOS/Android swipe) — restore the screen AND its scroll position
+window.addEventListener('popstate', (e) => {
+  const idx = (e.state && e.state.idx) || 0;
+  const dir = idx < navIdx ? 'back' : 'forward';
+  navIdx = idx;
+  setScreen((location.hash || '#home').slice(1), dir);
+});
 
 // ---------- checkboxes ----------
 function syncInputs() {
@@ -240,8 +264,9 @@ function tick() {
 // ---------- boot ----------
 {
   const initial = ((location.hash || '#home').slice(1) in SCREENS) ? location.hash.slice(1) : 'home';
-  history.replaceState({ name: initial }, '', '#' + initial);
-  setScreen(initial);
+  history.replaceState({ name: initial, idx: 0 }, '', '#' + initial);
+  navIdx = 0;
+  setScreen(initial);   // no dir -> instant, no transition
 }
 syncInputs();
 render();

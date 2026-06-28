@@ -41,11 +41,24 @@ body{
 .icon-btn.on{background:#cfe9cf;border-color:#9fce9f;color:#3c6b3c}
 
 /* ---------- screens ---------- */
-.screens{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;
+.screens{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;
   padding:6px 16px 96px;-webkit-overflow-scrolling:touch}
-.screen{display:none;animation:pop .32s cubic-bezier(.2,.9,.3,1.3)}
+.screen{display:none}
 .screen.is-active{display:block}
-@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---- view transitions: smooth directional push/pop on the content only ---- */
+#screens{view-transition-name:spw-content}
+::view-transition-group(spw-content){animation-duration:.3s;animation-timing-function:cubic-bezier(.33,0,.2,1)}
+::view-transition-old(spw-content),::view-transition-new(spw-content){
+  animation-duration:.3s;animation-timing-function:cubic-bezier(.33,0,.2,1)}
+html[data-nav="forward"]::view-transition-old(spw-content){animation-name:vt-out-left}
+html[data-nav="forward"]::view-transition-new(spw-content){animation-name:vt-in-right}
+html[data-nav="back"]::view-transition-old(spw-content){animation-name:vt-out-right}
+html[data-nav="back"]::view-transition-new(spw-content){animation-name:vt-in-left}
+@keyframes vt-in-right{from{transform:translateX(38px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes vt-out-left{from{transform:translateX(0);opacity:1}to{transform:translateX(-38px);opacity:0}}
+@keyframes vt-in-left{from{transform:translateX(-38px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes vt-out-right{from{transform:translateX(0);opacity:1}to{transform:translateX(38px);opacity:0}}
 
 .eyebrow{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ink-soft);margin:18px 6px 8px}

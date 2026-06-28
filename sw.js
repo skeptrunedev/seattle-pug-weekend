@@ -1,5 +1,5 @@
 // Service worker — offline shell + notification click handling.
-const CACHE = 'spw-v6';
+const CACHE = 'spw-v7';
 const SHELL = [
   '/', '/index.html', '/style.css', '/app.js', '/manifest.webmanifest',
   '/favicon.ico', '/favicon-32.png', '/favicon-16.png',
@@ -8,7 +8,8 @@ const SHELL = [
   '/assets/img/pug-cheeseburger.png', '/assets/img/pug-fishing.png', '/assets/img/pug-racing.png',
   '/assets/img/pug-checklist.png', '/assets/img/pug-heart.png', '/assets/img/pug-sleep.png',
   '/assets/img/pug-map.png', '/assets/img/pug-shaking-fun.png', '/assets/img/beanie-doodle.png',
-  '/assets/img/pug-smores.png',
+  '/assets/img/pug-smores.png', '/assets/img/pug-parksign.png', '/assets/img/pug-burger.png',
+  '/assets/img/pug-flag.png', '/assets/img/pug-cozy.png',
 ];
 
 self.addEventListener('install', (e) => {

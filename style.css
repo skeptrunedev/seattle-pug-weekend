@@ -235,7 +235,7 @@ body{
   .screen[data-screen=race] .screen-head,
   .screen[data-screen=fishing] .screen-head,
   .screen[data-screen=smores] .screen-head,
-  .screen[data-screen=fishing] .pug-sign{grid-column:1 / -1}
+  .screen .pug-sign{grid-column:1 / -1}
   .screen-head h1{font-size:1.6rem}
   .screen-head img{width:92px;height:92px}
 }

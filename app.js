@@ -1,7 +1,10 @@
-// ---------- Seattle Pug Weekend · companion app ----------
+// ---------- Seattle Weekend · companion app ----------
 // State is shared for everyone via /api/checks (Cloudflare D1).
-// localStorage is just a cache so the UI paints instantly + survives offline.
+// Cross-device alerts use Web Push; localStorage caches state for instant paint.
 const CACHE = 'spw-cache-v1';
+const NOTIF_PREF = 'spw-notif';
+const VAPID_PUBLIC = 'BFSu8U-LDVea9hFmAMQ9XHoaYfvPkmlXcllv7o1eqki9F7OABINKmDBHr4wLfVRasPOll4m6P3Y0tdheYOEkUrc';
+
 const SECTIONS = {
   parking: ['pk-discover', 'pk-tickets', 'pk-greenlake'],
   hike:    ['hk-water', 'hk-snacks', 'hk-wear', 'hk-misc'],
@@ -14,6 +17,13 @@ const RING_LEN = 2 * Math.PI * 52; // r=52
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
+// stable per-device id so the server can skip notifying the device that acted
+let CLIENT_ID = localStorage.getItem('spw-cid');
+if (!CLIENT_ID) {
+  CLIENT_ID = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+  localStorage.setItem('spw-cid', CLIENT_ID);
+}
+
 // ---------- state (cache-first, server-authoritative) ----------
 let state = {};
 try { state = JSON.parse(localStorage.getItem(CACHE)) || {}; } catch { state = {}; }
@@ -23,31 +33,20 @@ async function pull() {
   try {
     const r = await fetch('/api/checks', { cache: 'no-store' });
     if (!r.ok) throw new Error(r.status);
-    const server = await r.json();
-    state = server;            // server is the source of truth
+    state = await r.json();            // server is the source of truth
     cache();
     syncInputs();
     render();
-    setStatus(true);
-  } catch (e) {
-    setStatus(false);          // offline / no API (e.g. plain static preview)
-  }
+  } catch (e) { /* offline — keep cached state */ }
 }
 async function push(id, checked) {
   try {
-    const r = await fetch('/api/checks', {
+    await fetch('/api/checks', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id, checked }),
+      body: JSON.stringify({ id, checked, clientId: CLIENT_ID }),
     });
-    setStatus(r.ok);
-  } catch { setStatus(false); }
-}
-function setStatus(online) {
-  const el = $('#sync');
-  if (!el) return;
-  el.textContent = online ? 'synced' : 'offline';
-  el.classList.toggle('off', !online);
+  } catch { /* reconciles on next pull */ }
 }
 
 // ---------- navigation ----------
@@ -76,7 +75,7 @@ $$('.check input[type=checkbox]').forEach(input => {
     syncInputs();                       // keep home-list + section twins in lockstep
     render();
     if (input.checked) maybeCelebrate(id, before);
-    push(id, input.checked);            // persist for everyone
+    push(id, input.checked);            // persist + notify everyone else
   });
 });
 
@@ -135,6 +134,90 @@ function maybeCelebrate(id, prevCompleteCount) {
   }
 }
 
+// ---------- web push notifications ----------
+let swReg = null;
+function notifsOn() {
+  // Default ON forever once permission is granted — only off if explicitly disabled.
+  return 'Notification' in window && Notification.permission === 'granted' &&
+    localStorage.getItem(NOTIF_PREF) !== '0';
+}
+function showNotif(title, body) {
+  const opts = { body, icon: '/icon-192.png', badge: '/favicon-32.png', tag: 'spw-checks' };
+  if (swReg && swReg.showNotification) swReg.showNotification(title, opts);
+  else try { new Notification(title, opts); } catch {}
+}
+function urlB64ToU8(b64) {
+  const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+  const s = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(s);
+  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+async function subscribeToPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToU8(VAPID_PUBLIC),
+      });
+    }
+    await fetch('/api/subscribe', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ subscription: sub.toJSON ? sub.toJSON() : sub, clientId: CLIENT_ID }),
+    });
+  } catch { /* push unsupported / blocked */ }
+}
+async function unsubscribePush() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub) {
+      await fetch('/api/subscribe', {
+        method: 'DELETE', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ endpoint: sub.endpoint }),
+      });
+      await sub.unsubscribe();
+    }
+  } catch {}
+}
+function paintNotifBtn() {
+  const btn = $('#notif-btn');
+  if (!btn) return;
+  if (!('Notification' in window)) { btn.hidden = true; return; }
+  if (notifsOn()) { btn.textContent = '🔔 On'; btn.classList.add('on'); }
+  else { btn.textContent = '🔔 Notify'; btn.classList.remove('on'); }
+}
+async function toggleNotifs() {
+  if (!('Notification' in window)) return;
+  if (notifsOn()) { localStorage.setItem(NOTIF_PREF, '0'); await unsubscribePush(); paintNotifBtn(); return; }
+  let perm = Notification.permission;
+  if (perm !== 'granted') perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    localStorage.removeItem(NOTIF_PREF);        // back to default ON (forever)
+    await subscribeToPush();
+    showNotif('🐾 Notifications on', "You'll see when things get checked off.");
+  }
+  paintNotifBtn();
+}
+$('#notif-btn')?.addEventListener('click', toggleNotifs);
+
+// ---------- install (PWA) ----------
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); deferredPrompt = e;
+  const b = $('#install-btn'); if (b) b.hidden = false;
+});
+$('#install-btn')?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  $('#install-btn').hidden = true;
+});
+window.addEventListener('appinstalled', () => { const b = $('#install-btn'); if (b) b.hidden = true; });
+
 // ---------- countdown ----------
 function tick() {
   const now = new Date();
@@ -150,9 +233,26 @@ function tick() {
 go((location.hash || '#home').slice(1));
 syncInputs();
 render();
+paintNotifBtn();
 tick();
 setInterval(tick, 30000);
 pull();                                   // hydrate from server
-setInterval(pull, 20000);                 // keep in sync with the other person
+// near-realtime sync: poll fast while you're looking, gentler when backgrounded
+let pollTimer = null;
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  const delay = document.hidden ? 10000 : 2500;
+  pollTimer = setTimeout(async () => { await pull(); schedulePoll(); }, delay);
+}
+schedulePoll();
 window.addEventListener('focus', pull);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) pull(); });
+document.addEventListener('visibilitychange', () => { schedulePoll(); if (!document.hidden) pull(); });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      swReg = reg;
+      if (notifsOn()) subscribeToPush();    // keep the push subscription fresh (default-on)
+    }).catch(() => {});
+  });
+}

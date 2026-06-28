@@ -1,8 +1,9 @@
 name = "seattle-pug-weekend"
 compatibility_date = "2025-01-01"
-pages_build_output_dir = "."
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "pug-weekend"
-database_id = "placeholder-set-on-deploy"
+database_id = "3bd97b4e-ed3a-4468-a2ec-11957e66bb9b"

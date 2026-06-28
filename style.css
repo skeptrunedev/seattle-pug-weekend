@@ -33,9 +33,12 @@ body{
   padding:14px 18px 10px;
 }
 .brand{font-size:.92rem;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
-.sync{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  background:#cfe9cf;color:#3c6b3c;padding:3px 9px;border-radius:999px}
-.sync.off{background:#f0d6c8;color:#a4503a}
+.top-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{font-family:inherit;font-size:.66rem;font-weight:700;cursor:pointer;color:var(--ink);
+  background:var(--card);border:2px solid var(--line);padding:5px 10px;border-radius:999px;
+  box-shadow:0 2px 0 var(--cream-deep);transition:transform .1s}
+.icon-btn:active{transform:translateY(2px);box-shadow:none}
+.icon-btn.on{background:#cfe9cf;border-color:#9fce9f;color:#3c6b3c}
 
 /* ---------- screens ---------- */
 .screens{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;
@@ -160,6 +163,9 @@ body{
   display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.6rem;font-weight:700;
   border-radius:14px;transition:color .15s,background .15s}
 .tab .ti{font-size:1.25rem;transition:transform .2s cubic-bezier(.2,.9,.3,1.6)}
+.tab img.ti{width:32px;height:32px;object-fit:contain;
+  filter:saturate(.85) opacity(.7);transition:transform .2s cubic-bezier(.2,.9,.3,1.6),filter .15s}
+.tab.is-active img.ti{filter:none}
 .tab.is-active{color:var(--ink);background:var(--cream-deep)}
 .tab.is-active .ti{transform:translateY(-2px) scale(1.18)}
 
@@ -182,44 +188,45 @@ body{
   body{align-items:stretch;padding:32px;
     background-size:160px 160px,200px 200px,auto}
   .phone{
-    max-width:1080px;max-height:none;height:auto;min-height:calc(100dvh - 64px);
-    margin:0 auto;flex-direction:row;flex-wrap:wrap;align-items:stretch;
+    max-width:1080px;max-height:none;height:calc(100dvh - 64px);margin:0 auto;
+    display:grid;grid-template-columns:210px 1fr;grid-template-rows:auto 1fr;
     border-radius:30px;box-shadow:var(--shadow);overflow:hidden;
   }
-  /* header -> slim full-width ribbon */
-  .topbar{order:0;flex:1 0 100%;justify-content:space-between;
+  /* header -> slim full-width ribbon (row 1, never stretches) */
+  .topbar{grid-column:1 / -1;grid-row:1;justify-content:space-between;
     padding:16px 26px;border-bottom:2px solid var(--line)}
   .brand{font-size:1.05rem}
 
-  /* tab bar -> vertical left sidebar */
-  .tabbar{order:1;flex:0 0 210px;flex-direction:column;justify-content:flex-start;
+  /* tab bar -> vertical left sidebar (row 2, col 1) */
+  .tabbar{grid-column:1;grid-row:2;flex-direction:column;justify-content:flex-start;
     gap:6px;border-top:0;border-right:2px solid var(--line);padding:20px 14px;box-shadow:none}
   .tab{flex:0 0 auto;flex-direction:row;justify-content:flex-start;gap:13px;width:100%;
     font-size:.92rem;padding:13px 16px;border-radius:16px}
   .tab .ti{font-size:1.4rem}
+  .tab img.ti{width:36px;height:36px}
   .tab:hover{background:var(--cream-deep)}
 
-  /* content area */
-  .screens{order:2;flex:1 1 0;padding:30px 40px 56px;max-height:calc(100dvh - 64px - 52px)}
+  /* content area (row 2, col 2) */
+  .screens{grid-column:2;grid-row:2;min-height:0;padding:30px 40px 56px}
   .screen{max-width:920px;margin:0 auto}
   .eyebrow{margin-top:26px}
 
-  /* HOME dashboard grid */
-  .screen[data-screen=home]{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;align-content:start}
+  /* HOME dashboard grid (only when active, so nav still hides it) */
+  .screen[data-screen=home].is-active{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;align-content:start}
   .screen[data-screen=home] .hero,
   .screen[data-screen=home] .readiness,
   .screen[data-screen=home] .eyebrow,
+  .screen[data-screen=home] .tasklist,
   .screen[data-screen=home] .bento,
   .screen[data-screen=home] .pug-sign{grid-column:1 / -1}
-  .hero-banner{max-height:300px;object-fit:cover}
+  .hero-banner{max-height:none;object-fit:contain}
   .bento{grid-template-columns:repeat(4,1fr)}
   .tile img{width:96px;height:96px}
-  /* Sat + Sun timelines sit side by side (they follow their own eyebrows) */
   .screen[data-screen=home] .timeline{margin-top:0}
 
   /* multi-card screens -> two columns, header spans */
-  .screen[data-screen=parking],
-  .screen[data-screen=fishing]{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;align-content:start}
+  .screen[data-screen=parking].is-active,
+  .screen[data-screen=fishing].is-active{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;align-content:start}
   .screen[data-screen=parking] .screen-head,
   .screen[data-screen=fishing] .screen-head,
   .screen[data-screen=fishing] .pug-sign{grid-column:1 / -1}

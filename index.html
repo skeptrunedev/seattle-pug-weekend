@@ -4,14 +4,25 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f4e7cf" />
-<title>Seattle Pug Weekend 🐾</title>
-<meta name="description" content="A little companion app for our Seattle pug weekend — parking, hikes, lunch, and fishing, all tracked." />
+<title>Seattle Weekend 🐾</title>
+<meta name="description" content="A little companion app for our Seattle weekend — parking, hikes, lunch, and fishing, all tracked." />
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Seattle Pug Weekend 🐾" />
+<meta property="og:title" content="Seattle Weekend 🐾" />
 <meta property="og:description" content="Parking, hikes, lunch, and fishing — our Seattle weekend, tracked." />
-<meta property="og:image" content="assets/img/pug-banner.png" />
+<meta property="og:image" content="assets/img/pug-banner.png?v=2" />
 <meta name="twitter:card" content="summary_large_image" />
+<!-- icons / favicon -->
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<!-- PWA -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Seattle Weekend" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -22,8 +33,11 @@
 
   <!-- app header -->
   <header class="topbar">
-    <span class="brand">🐾 Seattle Pug Weekend</span>
-    <span id="sync" class="sync">·</span>
+    <span class="brand">🐾 Seattle Weekend</span>
+    <span class="top-actions">
+      <button id="install-btn" class="icon-btn" hidden title="Install app">⬇️ Install</button>
+      <button id="notif-btn" class="icon-btn" title="Get notified when things get checked off">🔔 Notify</button>
+    </span>
   </header>
 
   <!-- scrollable screen stack -->
@@ -32,7 +46,7 @@
     <!-- ================= HOME ================= -->
     <section class="screen is-active" data-screen="home">
       <div class="hero">
-        <img class="hero-banner" src="assets/img/pug-banner.png" alt="Seattle Pug Weekend" />
+        <img class="hero-banner" src="assets/img/pug-banner.png?v=2" alt="Seattle Pug Weekend" />
         <div class="countdown" id="countdown">· loading ·</div>
       </div>
 
@@ -48,7 +62,7 @@
         </div>
       </div>
 
-      <h2 class="eyebrow">things to do <small>· shared with the crew</small></h2>
+      <h2 class="eyebrow">things to do <small>· shared & synced live</small></h2>
       <div class="card tasklist">
         <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-discover"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy the Discover Pass</span></label>
         <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy 2 Speedway tickets (~$50)</span></label>
@@ -78,7 +92,7 @@
           <span class="tile-prog" data-prog="lunch">0/1</span>
         </button>
         <button class="tile" data-go="fishing" style="--c:var(--fish)">
-          <img src="assets/img/pug-fishing.png" alt="" /><span class="tile-name">Fishing</span>
+          <img src="assets/img/pug-fishing.png?v=2" alt="" /><span class="tile-name">Fishing</span>
           <span class="tile-prog" data-prog="fishing">0/3</span>
         </button>
       </div>
@@ -97,8 +111,11 @@
       <h2 class="eyebrow">sunday · jul 12</h2>
       <ol class="timeline card">
         <li><span class="t">8:00a</span> Green Lake fishing</li>
-        <li><span class="t">11:30a</span> Brunch / pack / relax</li>
-        <li><span class="t">2:00p</span> Head out</li>
+        <li><span class="t">12:30p</span> Lunch</li>
+        <li><span class="t">2:00p</span> Relax</li>
+        <li><span class="t">3:00p</span> It Takes Two <small>(co-op)</small></li>
+        <li><span class="t">6:30p</span> Movie <small>(maybe)</small></li>
+        <li><span class="t">9:00p</span> Head out</li>
       </ol>
       <div class="pug-sign"><img src="assets/img/pug-sleep.png" alt="" /><p>that's the weekend. good pug.</p></div>
     </section>
@@ -178,7 +195,7 @@
     <!-- ================= FISHING ================= -->
     <section class="screen" data-screen="fishing" style="--c:var(--fish)">
       <header class="screen-head">
-        <img src="assets/img/pug-fishing.png" alt="" />
+        <img src="assets/img/pug-fishing.png?v=2" alt="" />
         <div><h1>Fishing</h1><p class="screen-prog" data-prog="fishing">0/3 sorted</p></div>
       </header>
       <article class="card">
@@ -204,18 +221,18 @@
         <h3>🏡 Bring from home</h3>
         <label class="check"><input type="checkbox" data-id="fs-home"><span class="box"></span><span class="lbl">Pliers + clippers · net + bucket · trash bag + towel</span></label>
       </article>
-      <div class="pug-sign small"><img src="assets/img/pug-shaking-fun.png" alt="" /><p>tight lines 🐾</p></div>
+      <div class="pug-sign small"><img src="assets/img/pug-shaking-fun.png?v=2" alt="" /><p>tight lines 🐾</p></div>
     </section>
 
   </main>
 
   <!-- bottom tab bar -->
   <nav class="tabbar" id="tabbar">
-    <button class="tab is-active" data-go="home"><span class="ti">🏠</span><span>Home</span></button>
-    <button class="tab" data-go="parking"><span class="ti">🅿️</span><span>Park</span></button>
-    <button class="tab" data-go="hike"><span class="ti">🥾</span><span>Hike</span></button>
-    <button class="tab" data-go="lunch"><span class="ti">🍔</span><span>Lunch</span></button>
-    <button class="tab" data-go="fishing"><span class="ti">🎣</span><span>Fish</span></button>
+    <button class="tab is-active" data-go="home"><img class="ti" src="assets/img/pug-checklist.png" alt="" /><span>Home</span></button>
+    <button class="tab" data-go="parking"><img class="ti" src="assets/img/pug-car.png" alt="" /><span>Park</span></button>
+    <button class="tab" data-go="hike"><img class="ti" src="assets/img/pug-hiking.png" alt="" /><span>Hike</span></button>
+    <button class="tab" data-go="lunch"><img class="ti" src="assets/img/pug-cheeseburger.png" alt="" /><span>Lunch</span></button>
+    <button class="tab" data-go="fishing"><img class="ti" src="assets/img/pug-fishing.png?v=2" alt="" /><span>Fish</span></button>
   </nav>
 
   <!-- celebration layer -->

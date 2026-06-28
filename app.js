@@ -50,16 +50,22 @@ async function push(id, checked) {
   } catch { /* reconciles on next pull */ }
 }
 
-// ---------- navigation ----------
+// ---------- navigation (history-aware so Back / swipe-back works) ----------
 const SCREENS = { home: 1, ...SECTIONS };
-function go(name) {
+function setScreen(name) {
   if (!(name in SCREENS)) name = 'home';
   $$('.screen').forEach(s => s.classList.toggle('is-active', s.dataset.screen === name));
   $$('.tab').forEach(t => t.classList.toggle('is-active', t.dataset.go === name));
   $('#screens').scrollTop = 0;
-  history.replaceState(null, '', '#' + name);
+}
+function go(name) {
+  if (!(name in SCREENS)) name = 'home';
+  if (location.hash.slice(1) !== name) history.pushState({ name }, '', '#' + name);
+  setScreen(name);
 }
 $$('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
+// Back/forward (incl. iOS/Android swipe) restores the previous screen
+window.addEventListener('popstate', () => setScreen((location.hash || '#home').slice(1)));
 
 // ---------- checkboxes ----------
 function syncInputs() {
@@ -232,7 +238,11 @@ function tick() {
 }
 
 // ---------- boot ----------
-go((location.hash || '#home').slice(1));
+{
+  const initial = ((location.hash || '#home').slice(1) in SCREENS) ? location.hash.slice(1) : 'home';
+  history.replaceState({ name: initial }, '', '#' + initial);
+  setScreen(initial);
+}
 syncInputs();
 render();
 paintNotifBtn();

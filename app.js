@@ -221,8 +221,9 @@ window.addEventListener('appinstalled', () => { const b = $('#install-btn'); if 
 // ---------- countdown ----------
 function tick() {
   const now = new Date();
-  const trip = new Date('2026-07-11T08:00:00-07:00');
-  const days = Math.ceil((trip - now) / 86400000);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const trip = new Date(2026, 6, 11);     // Jul 11, 2026 — strict calendar-day count
+  const days = Math.round((trip - today) / 86400000);
   $('#countdown').textContent =
     days > 1 ? `🐾 ${days} days to Seattle` :
     days === 1 ? '🐾 tomorrow!' :

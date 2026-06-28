@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f4e7cf" />
+<title>Seattle Pug Weekend 🐾</title>
+<meta name="description" content="A little companion app for our Seattle pug weekend — parking, hikes, lunch, and fishing, all tracked." />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Seattle Pug Weekend 🐾" />
+<meta property="og:description" content="Parking, hikes, lunch, and fishing — our Seattle weekend, tracked." />
+<meta property="og:image" content="assets/img/pug-banner.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="phone" id="phone">
+
+  <!-- app header -->
+  <header class="topbar">
+    <span class="brand">🐾 Seattle Pug Weekend</span>
+    <span id="sync" class="sync">·</span>
+  </header>
+
+  <!-- scrollable screen stack -->
+  <main class="screens" id="screens">
+
+    <!-- ================= HOME ================= -->
+    <section class="screen is-active" data-screen="home">
+      <div class="hero">
+        <img class="hero-banner" src="assets/img/pug-banner.png" alt="Seattle Pug Weekend" />
+        <div class="countdown" id="countdown">· loading ·</div>
+      </div>
+
+      <div class="readiness card">
+        <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="readiness-num"><b id="readiness-pct">0%</b><span>ready</span></div>
+        <div class="readiness-meta">
+          <p class="readiness-title">Weekend readiness</p>
+          <p class="readiness-sub" id="readiness-sub">0 / 11 done · tap a card to start</p>
+        </div>
+      </div>
+
+      <h2 class="eyebrow">things to do <small>· shared with the crew</small></h2>
+      <div class="card tasklist">
+        <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-discover"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy the Discover Pass</span></label>
+        <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl"><span class="dot">park</span>Buy 2 Speedway tickets (~$50)</span></label>
+        <label class="check" style="--c:var(--park)"><input type="checkbox" data-id="pk-greenlake"><span class="box"></span><span class="lbl"><span class="dot">park</span>Green Lake — arrive ~8:00 AM</span></label>
+        <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-water"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Pack 2 L water</span></label>
+        <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-snacks"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Pack trail snacks</span></label>
+        <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-wear"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Shoes · layer · sunscreen + hat</span></label>
+        <label class="check" style="--c:var(--hike)"><input type="checkbox" data-id="hk-misc"><span class="box"></span><span class="lbl"><span class="dot">hike</span>Phone · bandaids · trash bag</span></label>
+        <label class="check" style="--c:var(--lunch)"><input type="checkbox" data-id="ln-call"><span class="box"></span><span class="lbl"><span class="dot">lunch</span>Call Twede's ahead</span></label>
+        <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-license"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Buy 2 fishing licenses</span></label>
+        <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-order"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Order Amazon fishing gear</span></label>
+        <label class="check" style="--c:var(--fish)"><input type="checkbox" data-id="fs-home"><span class="box"></span><span class="lbl"><span class="dot">fish</span>Pack tackle from home</span></label>
+      </div>
+
+      <h2 class="eyebrow">jump to a screen</h2>
+      <div class="bento">
+        <button class="tile" data-go="parking" style="--c:var(--park)">
+          <img src="assets/img/pug-car.png" alt="" /><span class="tile-name">Parking</span>
+          <span class="tile-prog" data-prog="parking">0/3</span>
+        </button>
+        <button class="tile" data-go="hike" style="--c:var(--hike)">
+          <img src="assets/img/pug-hiking.png" alt="" /><span class="tile-name">Hike</span>
+          <span class="tile-prog" data-prog="hike">0/4</span>
+        </button>
+        <button class="tile" data-go="lunch" style="--c:var(--lunch)">
+          <img src="assets/img/pug-cheeseburger.png" alt="" /><span class="tile-name">Lunch</span>
+          <span class="tile-prog" data-prog="lunch">0/1</span>
+        </button>
+        <button class="tile" data-go="fishing" style="--c:var(--fish)">
+          <img src="assets/img/pug-fishing.png" alt="" /><span class="tile-name">Fishing</span>
+          <span class="tile-prog" data-prog="fishing">0/3</span>
+        </button>
+      </div>
+
+      <h2 class="eyebrow">saturday · jul 11</h2>
+      <ol class="timeline card">
+        <li><span class="t">8:00a</span> Leave for Rattlesnake Ledge</li>
+        <li><span class="t">9:00a</span> Hike Rattlesnake Ledge</li>
+        <li><span class="t">11:30a</span> Lunch — Twede's, North Bend</li>
+        <li><span class="t">1:00p</span> Drive to Monroe (~1 hr)</li>
+        <li><span class="t">3:45p</span> Arrive Monroe (gates 4:00p)</li>
+        <li><span class="t">6:00p</span> Racing — PLM Reunion Night <small>(ends ~9:45p)</small></li>
+        <li><span class="t">10:00p</span> Back to Seattle</li>
+      </ol>
+
+      <h2 class="eyebrow">sunday · jul 12</h2>
+      <ol class="timeline card">
+        <li><span class="t">8:00a</span> Green Lake fishing</li>
+        <li><span class="t">11:30a</span> Brunch / pack / relax</li>
+        <li><span class="t">2:00p</span> Head out</li>
+      </ol>
+      <div class="pug-sign"><img src="assets/img/pug-sleep.png" alt="" /><p>that's the weekend. good pug.</p></div>
+    </section>
+
+    <!-- ================= PARKING ================= -->
+    <section class="screen" data-screen="parking" style="--c:var(--park)">
+      <header class="screen-head">
+        <img src="assets/img/pug-car.png" alt="" />
+        <div><h1>Parking</h1><p class="screen-prog" data-prog="parking">0/3 sorted</p></div>
+      </header>
+
+      <article class="card">
+        <h3>🥾 Rattlesnake Ledge <span class="tag">Sat AM</span></h3>
+        <p>I-90 <b>Exit 32</b>, ~4 mi south to the Rattlesnake Lake lot. Main lot is free but <b>fills by ~9 AM</b> in July.</p>
+        <p>We buy a <b>Discover Pass</b> so the overflow lot is a clean fallback (and circle the main lot — turnover is constant).</p>
+        <a class="btn" href="https://store.discoverpass.wa.gov/" target="_blank" rel="noopener">Buy Discover Pass · $45/yr ↗</a>
+        <label class="check"><input type="checkbox" data-id="pk-discover"><span class="box"></span><span class="lbl">Buy the Discover Pass ahead of time</span></label>
+      </article>
+
+      <article class="card">
+        <h3>🏁 Evergreen Speedway <span class="tag">Sat PM</span></h3>
+        <img class="card-pug" src="assets/img/pug-racing.png" alt="" />
+        <p><b>PLM Reunion Night</b> — 14405 179th Ave SE, Monroe.</p>
+        <p>Gates <b>4:00p</b> · racing <b>6:00p</b> · ends <b>~9:45p</b>. <b>Gravel lot is FREE</b> (paved $10).</p>
+        <a class="btn" href="https://maps.google.com/?q=Evergreen+Speedway+Monroe+WA" target="_blank" rel="noopener">Open in Maps ↗</a>
+        <label class="check"><input type="checkbox" data-id="pk-tickets"><span class="box"></span><span class="lbl">Buy 2 adult tickets ahead (~$50)</span></label>
+      </article>
+
+      <article class="card">
+        <h3>🎣 Green Lake <span class="tag">Sun AM</span></h3>
+        <p>Free street + lot parking around the lake — <b>go early</b>, it fills late morning.</p>
+        <label class="check"><input type="checkbox" data-id="pk-greenlake"><span class="box"></span><span class="lbl">Arrive by ~8:00 AM before the park gets busy</span></label>
+      </article>
+
+      <article class="card card-done">
+        <h3>🏠 Home base</h3>
+        <p>✅ Apartment with parking near the Space Needle — nothing to figure out.</p>
+      </article>
+    </section>
+
+    <!-- ================= HIKE ================= -->
+    <section class="screen" data-screen="hike" style="--c:var(--hike)">
+      <header class="screen-head">
+        <img src="assets/img/pug-hiking.png" alt="" />
+        <div><h1>Hike Prep</h1><p class="screen-prog" data-prog="hike">0/4 packed</p></div>
+      </header>
+      <article class="card">
+        <p><b>Rattlesnake Ledge</b> — ~4 mi round trip, ~1,160 ft gain, big view at the ledge. Pack the night before so the 8:00a start is grab-and-go.</p>
+      </article>
+      <article class="card">
+        <h3>💧 Water + snacks</h3>
+        <label class="check"><input type="checkbox" data-id="hk-water"><span class="box"></span><span class="lbl"><b>2 L water total</b> (1 L each; more if hot — the ledge is exposed)</span></label>
+        <label class="check"><input type="checkbox" data-id="hk-snacks"><span class="box"></span><span class="lbl">Trail snacks: trail mix, fruit, bars, something salty</span></label>
+      </article>
+      <article class="card">
+        <h3>🎒 Wear / carry</h3>
+        <label class="check"><input type="checkbox" data-id="hk-wear"><span class="box"></span><span class="lbl">Shoes with grip · layer · sunscreen + hat</span></label>
+        <label class="check"><input type="checkbox" data-id="hk-misc"><span class="box"></span><span class="lbl">Phone charged · bandaids · trash bag (pack it out)</span></label>
+      </article>
+    </section>
+
+    <!-- ================= LUNCH ================= -->
+    <section class="screen" data-screen="lunch" style="--c:var(--lunch)">
+      <header class="screen-head">
+        <img src="assets/img/pug-cheeseburger.png" alt="" />
+        <div><h1>Lunch</h1><p class="screen-prog" data-prog="lunch">0/1 sorted</p></div>
+      </header>
+      <article class="card">
+        <h3>🍔 Twede's Cafe</h3>
+        <p>The <i>Twin Peaks</i> "Double R Diner." Big portions, burgers with unlimited fries, cherry pie. Post-hike, on the way to Monroe.</p>
+        <p class="meta">137 W North Bend Way, North Bend, WA</p>
+        <a class="btn" href="tel:4258315511">Call 425-831-5511 ↗</a>
+        <label class="check"><input type="checkbox" data-id="ln-call"><span class="box"></span><span class="lbl">Call ahead — it gets a weekend wait</span></label>
+      </article>
+    </section>
+
+    <!-- ================= FISHING ================= -->
+    <section class="screen" data-screen="fishing" style="--c:var(--fish)">
+      <header class="screen-head">
+        <img src="assets/img/pug-fishing.png" alt="" />
+        <div><h1>Fishing</h1><p class="screen-prog" data-prog="fishing">0/3 sorted</p></div>
+      </header>
+      <article class="card">
+        <p><b>Green Lake</b> — stocked rainbow trout, fished from the docks on the south, east, or northeast shore. Statewide rules: no minimum size, <b>5 trout/day</b>.</p>
+      </article>
+      <article class="card">
+        <h3>🪪 Licenses</h3>
+        <p>Required for <b>both of us</b> (age 15+). Get a short-term freshwater license — temporary license is emailed immediately.</p>
+        <a class="btn" href="https://fishhunt.dfw.wa.gov/" target="_blank" rel="noopener">Buy licenses · fishhunt.dfw.wa.gov ↗</a>
+        <label class="check"><input type="checkbox" data-id="fs-license"><span class="box"></span><span class="lbl">Buy 2 short-term freshwater licenses</span></label>
+      </article>
+      <article class="card">
+        <h3>🎣 Gear — buy from Amazon <small>(~$105 for 2)</small></h3>
+        <ul class="shop">
+          <li><a href="https://www.amazon.com/Zebco-Spincast-Comfortable-Quickset-Anti-Reverse/dp/B08MM4TX1X" target="_blank" rel="noopener">Zebco 33 combo ×2 ↗</a></li>
+          <li><a href="https://www.amazon.com/berkley-powerbait-trout-bait/s?k=berkley+powerbait+trout+bait" target="_blank" rel="noopener">PowerBait trout bait ×2 ↗</a></li>
+          <li><a href="https://www.amazon.com/s?k=snelled+trout+hooks+size+8" target="_blank" rel="noopener">Snelled trout hooks (8–10) ↗</a></li>
+          <li><a href="https://www.amazon.com/s?k=fishing+bobber+split+shot+weight+kit" target="_blank" rel="noopener">Split-shot + bobber kit ↗</a></li>
+        </ul>
+        <label class="check"><input type="checkbox" data-id="fs-order"><span class="box"></span><span class="lbl">Order the gear early in the week (arrives before Sat)</span></label>
+      </article>
+      <article class="card">
+        <h3>🏡 Bring from home</h3>
+        <label class="check"><input type="checkbox" data-id="fs-home"><span class="box"></span><span class="lbl">Pliers + clippers · net + bucket · trash bag + towel</span></label>
+      </article>
+      <div class="pug-sign small"><img src="assets/img/pug-shaking-fun.png" alt="" /><p>tight lines 🐾</p></div>
+    </section>
+
+  </main>
+
+  <!-- bottom tab bar -->
+  <nav class="tabbar" id="tabbar">
+    <button class="tab is-active" data-go="home"><span class="ti">🏠</span><span>Home</span></button>
+    <button class="tab" data-go="parking"><span class="ti">🅿️</span><span>Park</span></button>
+    <button class="tab" data-go="hike"><span class="ti">🥾</span><span>Hike</span></button>
+    <button class="tab" data-go="lunch"><span class="ti">🍔</span><span>Lunch</span></button>
+    <button class="tab" data-go="fishing"><span class="ti">🎣</span><span>Fish</span></button>
+  </nav>
+
+  <!-- celebration layer -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="cheer" id="cheer" aria-hidden="true"><img src="assets/img/pug-heart.png" alt="" /><p id="cheer-text">all set! 🐾</p></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

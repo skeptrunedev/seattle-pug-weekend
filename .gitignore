@@ -1,0 +1,22 @@
+# cloudflare / wrangler local state
+.wrangler/
+.dev.vars
+.mf/
+
+# node
+node_modules/
+npm-debug.log*
+
+# os
+.DS_Store
+
+# third-party sticker pack (copyrighted) + image intermediates — not for OSS
+assets/stickers/
+assets/generated/
+
+# local planning drafts
+content/
+sticker-prompts.md
+
+# unused theme reference image (derivative art)
+timeline.png

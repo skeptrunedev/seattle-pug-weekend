@@ -1,5 +1,5 @@
 // Service worker — offline shell + notification click handling.
-const CACHE = 'spw-v7';
+const CACHE = 'spw-v8';
 const SHELL = [
   '/', '/index.html', '/style.css', '/app.js', '/manifest.webmanifest',
   '/favicon.ico', '/favicon-32.png', '/favicon-16.png',

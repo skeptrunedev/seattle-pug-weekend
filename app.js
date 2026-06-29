@@ -320,19 +320,26 @@ document.addEventListener('click', (e) => {
 });
 
 // ---------- install (PWA) ----------
+const INSTALL_HIDE = 'spw-install-hide';
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); deferredPrompt = e;
-  const b = $('#install-btn'); if (b) b.hidden = false;
-});
+function hideInstall() { const b = $('#install-btn'); if (b) b.hidden = true; }
+function refreshInstallBtn() {
+  const b = $('#install-btn'); if (!b) return;
+  // only show if installable, not already installed, and not previously used/dismissed
+  b.hidden = !(deferredPrompt && !isStandalone() && localStorage.getItem(INSTALL_HIDE) !== '1');
+}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; refreshInstallBtn(); });
 $('#install-btn')?.addEventListener('click', async () => {
+  localStorage.setItem(INSTALL_HIDE, '1');     // once pressed, don't show again
+  hideInstall();
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   deferredPrompt = null;
-  $('#install-btn').hidden = true;
 });
-window.addEventListener('appinstalled', () => { const b = $('#install-btn'); if (b) b.hidden = true; });
+window.addEventListener('appinstalled', () => { localStorage.setItem(INSTALL_HIDE, '1'); deferredPrompt = null; hideInstall(); });
+if (isStandalone()) hideInstall();
 
 // ---------- countdown ----------
 function tick() {

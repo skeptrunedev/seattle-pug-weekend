@@ -64,7 +64,7 @@ async function sendPush(env, id, checked, actorClientId) {
   const { results } = await env.DB.prepare('SELECT endpoint, sub, client_id FROM push_subs').all();
   const message = {
     data: { title: '🐾 Seattle Weekend', body: `${LABELS[id] || id} ${checked ? 'checked off ✓' : 'unchecked'}` },
-    options: { ttl: 600, urgency: 'high' },
+    options: { ttl: 86400, urgency: 'high' },   // hold up to 24h so offline/asleep devices still get it
   };
   await Promise.all((results || []).map(async (row) => {
     if (actorClientId && row.client_id === actorClientId) return; // skip the device that made the change
@@ -72,8 +72,9 @@ async function sendPush(env, id, checked, actorClientId) {
     try { subscription = JSON.parse(row.sub); } catch { return; }
     try {
       const payload = await buildPushPayload(message, subscription, vapid);
-      const res = await fetch(subscription.endpoint, payload);
-      if (res.status === 404 || res.status === 410) {
+      let res = await fetch(subscription.endpoint, payload).catch(() => null);
+      if (!res || res.status >= 500) res = await fetch(subscription.endpoint, payload).catch(() => null); // one retry on transient
+      if (res && (res.status === 404 || res.status === 410)) {
         await env.DB.prepare('DELETE FROM push_subs WHERE endpoint = ?1').bind(row.endpoint).run();
       }
     } catch { /* ignore individual failures */ }

@@ -1,5 +1,12 @@
-// Service worker — offline shell + notification click handling.
-const CACHE = 'spw-v8';
+// Service worker — offline shell + push handling.
+const CACHE = 'spw-v9';
+const VAPID_PUBLIC = 'BFSu8U-LDVea9hFmAMQ9XHoaYfvPkmlXcllv7o1eqki9F7OABINKmDBHr4wLfVRasPOll4m6P3Y0tdheYOEkUrc';
+function urlB64ToU8(b64) {
+  const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+  const s = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(s);
+  return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+}
 const SHELL = [
   '/', '/index.html', '/style.css', '/app.js', '/manifest.webmanifest',
   '/favicon.ico', '/favicon-32.png', '/favicon-16.png',
@@ -53,6 +60,22 @@ self.addEventListener('push', (e) => {
   e.waitUntil(self.registration.showNotification(d.title || '🐾 Seattle Weekend', {
     body: d.body || '', icon: '/icon-192.png', badge: '/favicon-32.png', tag: 'spw-checks', renotify: true,
   }));
+});
+
+// Browsers occasionally rotate the push subscription — re-subscribe so the
+// device keeps receiving instead of silently going dark.
+self.addEventListener('pushsubscriptionchange', (e) => {
+  e.waitUntil((async () => {
+    try {
+      const sub = await self.registration.pushManager.subscribe({
+        userVisibleOnly: true, applicationServerKey: urlB64ToU8(VAPID_PUBLIC),
+      });
+      await fetch('/api/subscribe', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ subscription: sub.toJSON ? sub.toJSON() : sub }),
+      });
+    } catch { /* will re-sync next app open */ }
+  })());
 });
 
 self.addEventListener('notificationclick', (e) => {

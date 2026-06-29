@@ -1,5 +1,5 @@
 // Service worker — offline shell + push handling.
-const CACHE = 'spw-v9';
+const CACHE = 'spw-v10';
 const VAPID_PUBLIC = 'BFSu8U-LDVea9hFmAMQ9XHoaYfvPkmlXcllv7o1eqki9F7OABINKmDBHr4wLfVRasPOll4m6P3Y0tdheYOEkUrc';
 function urlB64ToU8(b64) {
   const pad = '='.repeat((4 - (b64.length % 4)) % 4);

@@ -8,6 +8,10 @@
   "orientation": "portrait",
   "launch_handler": { "client_mode": "focus-existing" },
   "handle_links": "preferred",
+  "related_applications": [
+    { "platform": "webapp", "url": "https://seattle.skeptrune.com/manifest.webmanifest" }
+  ],
+  "prefer_related_applications": false,
   "background_color": "#f4e7cf",
   "theme_color": "#f4e7cf",
   "icons": [

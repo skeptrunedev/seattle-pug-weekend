@@ -340,6 +340,12 @@ $('#install-btn')?.addEventListener('click', async () => {
 });
 window.addEventListener('appinstalled', () => { localStorage.setItem(INSTALL_HIDE, '1'); deferredPrompt = null; hideInstall(); });
 if (isStandalone()) hideInstall();
+// Definitive Android check: if our PWA is already installed, never show install.
+if (navigator.getInstalledRelatedApps) {
+  navigator.getInstalledRelatedApps().then((apps) => {
+    if (apps && apps.length) { localStorage.setItem(INSTALL_HIDE, '1'); hideInstall(); }
+  }).catch(() => {});
+}
 
 // ---------- countdown ----------
 function tick() {

@@ -10,3 +10,11 @@ CREATE TABLE IF NOT EXISTS push_subs (
   client_id  TEXT,
   created_at TEXT
 );
+
+CREATE TABLE IF NOT EXISTS activity (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  item       TEXT NOT NULL,
+  checked    INTEGER NOT NULL,
+  label      TEXT,
+  created_at TEXT DEFAULT (datetime('now'))
+);

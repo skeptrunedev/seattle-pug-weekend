@@ -36,9 +36,15 @@
     <span class="brand" data-go="home">Seattle Weekend</span>
     <span class="top-actions">
       <button id="install-btn" class="icon-btn" hidden title="Install app">⬇️ Install</button>
-      <button id="notif-btn" class="bell-btn" title="Get notified when things get checked off" aria-label="Notifications">🔔<span class="bell-dot" aria-hidden="true"></span></button>
+      <button id="notif-btn" class="icon-btn" aria-label="Notifications">🔔 Turn on</button>
     </span>
   </header>
+
+  <!-- notifications feed (shown once enabled) -->
+  <div id="notif-panel" class="notif-panel" hidden>
+    <div class="notif-head"><span>Notifications</span><button id="notif-off" class="notif-off">Turn off</button></div>
+    <div id="notif-list" class="notif-list"></div>
+  </div>
 
   <!-- scrollable screen stack -->
   <main class="screens" id="screens">

@@ -46,7 +46,23 @@ body{
 .bell-dot{position:absolute;top:1px;right:2px;width:9px;height:9px;border-radius:50%;
   background:var(--collar);border:2px solid var(--cream);
   opacity:0;transform:scale(.4);transition:opacity .15s,transform .18s cubic-bezier(.2,.9,.3,1.6)}
-.bell-btn.on .bell-dot{opacity:1;transform:scale(1)}
+.bell-btn.has-unread .bell-dot{opacity:1;transform:scale(1)}
+
+/* notifications feed panel */
+.notif-panel{position:absolute;top:50px;right:12px;z-index:40;width:min(320px,calc(100% - 24px));
+  max-height:min(60vh,460px);overflow-y:auto;background:var(--card);border:2px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow);padding:6px}
+.notif-panel.open{animation:pop .2s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.notif-head{display:flex;justify-content:space-between;align-items:center;padding:6px 8px 8px;
+  font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.notif-off{font-family:inherit;font-size:.62rem;font-weight:700;cursor:pointer;color:var(--collar);
+  background:none;border:0;text-transform:uppercase;letter-spacing:.04em}
+.notif-row{display:flex;align-items:baseline;gap:10px;padding:9px 8px;border-top:1px dashed var(--line);font-size:.82rem;line-height:1.4}
+.notif-row .ne{font-size:1rem}
+.notif-row .nt{flex:1}
+.notif-row .when{color:var(--ink-soft);font-size:.68rem;white-space:nowrap}
+.notif-empty{padding:22px 8px;text-align:center;color:var(--ink-soft);font-size:.82rem}
 
 /* ---------- screens ---------- */
 .screens{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;

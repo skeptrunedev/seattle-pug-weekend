@@ -44,6 +44,11 @@ export async function onRequestPost(context) {
               ON CONFLICT(id) DO UPDATE SET checked = ?2, updated_at = datetime('now')`)
     .bind(id, checked ? 1 : 0)
     .run();
+  // Append to the activity feed (history shown in the in-app bell).
+  await env.DB
+    .prepare(`INSERT INTO activity (item, checked, label, created_at) VALUES (?1, ?2, ?3, datetime('now'))`)
+    .bind(id, checked ? 1 : 0, LABELS[id] || id)
+    .run();
   // Notify everyone else's devices in the background.
   context.waitUntil(sendPush(env, id, !!checked, clientId));
   return json({ ok: true, id, checked: !!checked });

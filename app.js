@@ -107,6 +107,7 @@ $$('.check input[type=checkbox]').forEach(input => {
     render();
     if (input.checked) maybeCelebrate(id, before);
     push(id, input.checked);            // persist + notify everyone else
+    setTimeout(() => refreshActivity(true), 700);  // log own action, don't self-badge
   });
 });
 
@@ -213,27 +214,110 @@ async function unsubscribePush() {
     }
   } catch {}
 }
+// ---------- in-app notifications feed (Instagram-style) ----------
+const SEEN_KEY = 'spw-seen-id';
+const ACT_EMOJI = { pk: '🅿️', hk: '🥾', ln: '🍔', fs: '🎣', sm: '🔥' };
+let activity = [];
+let lastSeenId = parseInt(localStorage.getItem(SEEN_KEY) || '0', 10) || 0;
+
 function paintNotifBtn() {
   const btn = $('#notif-btn');
   if (!btn) return;
   if (!('Notification' in window)) { btn.hidden = true; return; }
-  const on = notifsOn();
-  btn.classList.toggle('on', on);                 // shows the dot
-  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  if (notifsOn()) {
+    btn.className = 'bell-btn';
+    btn.innerHTML = '🔔<span class="bell-dot" aria-hidden="true"></span>';
+    btn.title = 'Notifications';
+  } else {
+    btn.className = 'icon-btn';
+    btn.textContent = '🔔 Turn on';
+    btn.title = 'Turn on notifications';
+  }
+  updateDot();
 }
-async function toggleNotifs() {
+function updateDot() {
+  const btn = $('#notif-btn');
+  if (!btn || !btn.classList.contains('bell-btn')) return;
+  const newest = activity[0] ? activity[0].id : 0;
+  btn.classList.toggle('has-unread', newest > lastSeenId);
+}
+function ago(ts) {
+  const d = new Date(String(ts).replace(' ', 'T') + 'Z');
+  const s = Math.max(0, (Date.now() - d.getTime()) / 1000);
+  if (s < 60) return 'now';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  if (s < 86400) return Math.floor(s / 3600) + 'h';
+  return Math.floor(s / 86400) + 'd';
+}
+function renderActivity() {
+  const body = $('#notif-list');
+  if (!body) return;
+  if (!activity.length) { body.innerHTML = '<div class="notif-empty">No activity yet 🐾</div>'; return; }
+  body.innerHTML = activity.map((a) => {
+    const emoji = ACT_EMOJI[a.item.split('-')[0]] || '🐾';
+    const verb = a.checked ? 'checked off ✓' : 'unchecked';
+    return `<div class="notif-row"><span class="ne">${emoji}</span>` +
+      `<span class="nt">${a.label || a.item} <b>${verb}</b></span>` +
+      `<span class="when">${ago(a.created_at)}</span></div>`;
+  }).join('');
+}
+async function refreshActivity(markSeen) {
+  if (!notifsOn()) return;
+  try {
+    const r = await fetch('/api/activity', { cache: 'no-store' });
+    if (!r.ok) return;
+    activity = await r.json();
+    const open = $('#notif-panel')?.classList.contains('open');
+    if (open) renderActivity();
+    if (markSeen || open) {
+      lastSeenId = activity[0] ? activity[0].id : 0;
+      localStorage.setItem(SEEN_KEY, String(lastSeenId));
+    }
+    updateDot();
+  } catch { /* offline */ }
+}
+function openPanel() {
+  const p = $('#notif-panel'); if (!p) return;
+  p.hidden = false; p.classList.add('open');
+  renderActivity();
+  refreshActivity(true);
+}
+function closePanel() {
+  const p = $('#notif-panel'); if (!p) return;
+  p.classList.remove('open'); p.hidden = true;
+}
+async function enableNotifs() {
   if (!('Notification' in window)) return;
-  if (notifsOn()) { localStorage.setItem(NOTIF_PREF, '0'); await unsubscribePush(); paintNotifBtn(); return; }
   let perm = Notification.permission;
   if (perm !== 'granted') perm = await Notification.requestPermission();
   if (perm === 'granted') {
-    localStorage.removeItem(NOTIF_PREF);        // back to default ON (forever)
+    localStorage.removeItem(NOTIF_PREF);
     await subscribeToPush();
+    paintNotifBtn();
+    refreshActivity(true);
     showNotif('🐾 Notifications on', "You'll see when things get checked off.");
   }
+}
+async function disableNotifs() {
+  localStorage.setItem(NOTIF_PREF, '0');
+  await unsubscribePush();
+  closePanel();
   paintNotifBtn();
 }
-$('#notif-btn')?.addEventListener('click', toggleNotifs);
+$('#notif-btn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (notifsOn()) {
+    $('#notif-panel')?.classList.contains('open') ? closePanel() : openPanel();
+  } else {
+    enableNotifs();
+  }
+});
+$('#notif-off')?.addEventListener('click', disableNotifs);
+document.addEventListener('click', (e) => {
+  const p = $('#notif-panel');
+  if (!p || !p.classList.contains('open')) return;
+  if (!p.contains(e.target) && !$('#notif-btn').contains(e.target)) closePanel();
+});
 
 // ---------- install (PWA) ----------
 let deferredPrompt = null;
@@ -272,6 +356,8 @@ function tick() {
 syncInputs();
 render();
 paintNotifBtn();
+refreshActivity(false);                    // populate the unread dot
+setInterval(() => refreshActivity(false), 15000);
 tick();
 setInterval(tick, 30000);
 pull();                                   // hydrate from server
@@ -283,8 +369,8 @@ function schedulePoll() {
   pollTimer = setTimeout(async () => { await pull(); schedulePoll(); }, delay);
 }
 schedulePoll();
-window.addEventListener('focus', pull);
-document.addEventListener('visibilitychange', () => { schedulePoll(); if (!document.hidden) pull(); });
+window.addEventListener('focus', () => { pull(); refreshActivity(false); });
+document.addEventListener('visibilitychange', () => { schedulePoll(); if (!document.hidden) { pull(); refreshActivity(false); } });
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

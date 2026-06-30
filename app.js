@@ -351,7 +351,7 @@ if (navigator.getInstalledRelatedApps) {
 function tick() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const trip = new Date(2026, 6, 11);     // Jul 11, 2026 — strict calendar-day count
+  const trip = new Date(2026, 6, 18);     // Jul 18, 2026 — strict calendar-day count
   const days = Math.round((trip - today) / 86400000);
   $('#countdown').textContent =
     days > 1 ? `🐾 ${days} days to Seattle` :
